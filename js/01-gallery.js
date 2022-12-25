@@ -1,7 +1,6 @@
 import { galleryItems } from './gallery-items.js';
 
 const galleryEl = document.querySelector('.gallery');
-
 const cards = renderImg(galleryItems);
 
 galleryEl.insertAdjacentHTML('afterBegin', cards);
@@ -17,20 +16,36 @@ function renderImg(gallery) {
     })
     .join('');
 }
+
 console.log(galleryEl);
 
 const instance = basicLightbox.create(`<img class="modal-img src="">`, {
   onShow: instance => {
-    window.addEventListener('keydown', onEscCloseModal);
+    document.addEventListener('keydown', handleClose);
   },
 
   onClose: instance => {
-    window.removeEventListener('keydown', onEscCloseModal);
+    document.removeEventListener('keydown', handleClose);
   },
 });
 
 function openImageClick(e) {
-  console.log(e);
+  const { target } = e;
+  e.preventDefault();
+
+  if (target.nodeName !== 'IMG') {
+    return;
+  }
+
+  instance.element().querySelector('img').src = target.dataset.source;
+  instance.show();
 }
 
 galleryEl.addEventListener('click', openImageClick);
+
+function handleClose(event) {
+  if (event.key === 'Escape') {
+    instance.close();
+    return;
+  }
+}

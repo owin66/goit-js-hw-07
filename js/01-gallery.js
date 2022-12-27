@@ -5,6 +5,8 @@ const cards = renderImg(galleryItems);
 
 galleryEl.insertAdjacentHTML('afterBegin', cards);
 
+// render cards
+
 function renderImg(gallery) {
   return gallery
     .map(({ preview, original, description }) => {
